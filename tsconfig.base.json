@@ -1,0 +1,11 @@
+{
+  // Shared strictness for every workspace. Each app and package tsconfig extends this file and adds
+  // only environment settings (module, lib, jsx, include). Never loosen these flags in a workspace.
+  "compilerOptions": {
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "exactOptionalPropertyTypes": true,
+    "noPropertyAccessFromIndexSignature": true
+  }
+}

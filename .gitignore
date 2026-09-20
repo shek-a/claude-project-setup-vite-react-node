@@ -1,0 +1,42 @@
+# Dependencies
+node_modules/
+
+# Yarn: keep the release and plugins, ignore the rest (Yarn 4; harmless on Yarn 1)
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+.pnp.*
+
+# Builds
+dist/
+dist-ssr/
+build/
+*.tsbuildinfo
+
+# Test output
+coverage/
+playwright-report/
+test-results/
+blob-report/
+.playwright/
+
+# Environment: .env.example is committed and documents every variable
+.env
+.env.*
+!.env.example
+*.local
+
+# Logs
+*.log
+yarn-debug.log*
+yarn-error.log*
+
+# Editors and OS. Delete a line to share that editor's settings with the team.
+.DS_Store
+.idea/
+.vscode/
+
+# Claude Code: personal overrides and approvals, never shared
+.claude/settings.local.json
