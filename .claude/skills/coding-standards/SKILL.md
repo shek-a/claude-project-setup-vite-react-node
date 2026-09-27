@@ -68,6 +68,44 @@ function checkout(cart: Cart, customer: Customer): void {
 }
 ```
 
+### When a complexity cap trips
+
+ESLint caps cyclomatic complexity at 8. Every `case` counts, so an exhaustive switch that only maps a value fails once the union grows past about eight members.
+
+**Violation:** complexity 10, and it grows with every new error case.
+
+```ts
+export function statusFor(error: ReserveCarError): number {
+  switch (error.kind) {
+    case "car_unavailable": return 409;
+    case "customer_ineligible": return 403;
+    case "period_invalid": return 400;
+    case "payment_declined": return 402;
+    case "licence_expired": return 403;
+    case "car_off_fleet": return 409;
+    case "overdue_returns": return 403;
+    case "branch_closed": return 409;
+    case "quote_expired": return 410;
+  }
+}
+```
+
+**Fix:** a lookup table. Complexity 1, the pairs read as data, and `satisfies` still requires an entry for every member of the union.
+
+```ts
+const ERROR_STATUS = {
+  car_unavailable: 409, customer_ineligible: 403, period_invalid: 400,
+  payment_declined: 402, licence_expired: 403, car_off_fleet: 409,
+  overdue_returns: 403, branch_closed: 409, quote_expired: 410,
+} as const satisfies Record<ReserveCarError["kind"], number>;
+
+export function statusFor(error: ReserveCarError): number {
+  return ERROR_STATUS[error.kind];
+}
+```
+
+A switch is still right when each case does different *work* rather than returning a different value; if that switch trips the cap, the case bodies want extracting into named functions. The same applies to the other caps: nesting over 2 usually means an early return is missing, and more than 3 parameters usually means a missing value object or options object.
+
 ### Named predicates
 
 **Violation:**

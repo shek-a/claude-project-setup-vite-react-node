@@ -12,6 +12,7 @@ paths:
 - Single responsibility: a class, module, component, or hook has one reason to change. If describing it needs "and", split it.
 - One level of abstraction per function: a function either orchestrates (calls well-named steps) or does low-level work (loops, string handling, I/O calls). Never both. Extract the low-level parts into named functions.
 - Extract compound boolean conditions into a named predicate: `if (isRefundable(order))`, not three `&&` clauses inline.
+- ESLint caps cyclomatic complexity at 8, nesting at 2, parameters at 3, and function length. When one trips, that is a design signal: extract a named function or predicate, replace a branch chain with a lookup table, or model the cases as a discriminated union. Never raise a cap or disable the rule.
 - Apply design patterns, SOLID, DRY, YAGNI, and KISS pragmatically: only when the current problem calls for them, never mechanically or speculatively. Prefer explicit over clever.
 - Name things with the ubiquitous language from `docs/domain/`. No generic names like `data`, `info`, `manager`, `helper`, `utils`.
 - Apps import their own modules through the `@/` alias, never relative paths. Inside `packages/*`, use relative imports (the alias would resolve against the consuming app); import other workspaces by package name.
