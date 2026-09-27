@@ -19,9 +19,17 @@ Setup, stack, and how to run everything: `README.md`.
 - Never weaken or delete an existing test to get green. If a requirement changed, say so explicitly first.
 - New feature or new domain concept: run `/domain-driven-design` before any code.
 - New frontend capability: run `/frontend-domain-modeling` before any code (after `/domain-driven-design` if the backend changes too).
-- Before calling a feature done, have the `code-reviewer` subagent review the diff.
 - Check library and framework APIs against current docs with the Context7 MCP tools (`resolve-library-id`, then `query-docs`) instead of relying on memory; versions change APIs and defaults.
-- Never end a turn with failing tests or type errors; a Stop hook enforces this.
+
+# Definition of done
+- A turn is done when lint, typecheck, and unit tests pass. The Stop hook enforces that much and nothing more.
+- A task is done when every test-list item for it passes, plus the suite that matches what changed:
+  - backend `infrastructure/` (repositories, adapters): `yarn workspace backend test:integration`
+  - a frontend journey or the app shell: `yarn workspace webapp test:ui`
+  - the contract, or anything spanning both apps: `yarn workspace webapp test:e2e`, the full-stack journey. A full-stack change is not done until it passes.
+- Say which suites you ran and which you didn't. Never describe a suite you skipped as passing.
+- The `code-reviewer` has run, and every finding is fixed or declined with a reason.
+- `docs/domain/<context>.md` and the contract match the code, and nothing is left TODO, skipped, or `.only`.
 
 # Architecture
 - The backend owns the business rules and is the source of truth; HTTP is one delivery layer. The frontend never re-implements a domain invariant.

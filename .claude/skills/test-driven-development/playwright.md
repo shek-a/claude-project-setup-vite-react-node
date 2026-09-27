@@ -46,3 +46,4 @@ browser -> real frontend build -> HTTP -> real API -> domain + repositories -> P
 - `webServer` boots the API and the frontend; `use.baseURL` points at the frontend.
 - Keep it to the happy path plus at most one failure. Anything more belongs in the `ui` layer, which drives failures without touching data.
 - When this fails but the component tests pass, the contract drifted: the path, the payload, or an error shape no longer matches what the API sends.
+- Any change spanning both apps, including every contract change, is unfinished until this journey passes. Green unit tests on each side prove nothing about the two of them together.

@@ -21,6 +21,7 @@ Rules:
 - Assert on the exact values a mock received, captured from `mock.calls` (e.g. the aggregate passed to `save`). Never `expect.anything()`.
 - A bug fix starts with a test that reproduces the bug.
 - Finish every turn green. Do not stop mid-cycle in red; the Stop hook will block it.
+- Green unit tests end a turn, not a task. A task is done when it meets the Definition of done in `CLAUDE.md`, which names the suite each kind of change must pass.
 
 Side-specific guidance:
 - Backend (`apps/backend`): read [backend.md](backend.md)
