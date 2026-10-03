@@ -88,18 +88,26 @@ apps/
 ├── backend/
 │   └── src/
 │       └── <context>/          # one bounded context, e.g. rentals/
-│           ├── domain/         # aggregates, value objects, domain services, events, repository interfaces
+│           ├── domain/         # pure TypeScript, grouped by concept once it grows:
+│           │   ├── <aggregate>/    #   root, state, lifecycle operations, events, its tests
+│           │   ├── value-objects/
+│           │   ├── <policies>/     #   replaceable rules named as the domain names them
+│           │   └── testing/        #   hand-placement builders, tests only
 │           ├── application/    # use cases
 │           ├── infrastructure/ # repository implementations, adapters
 │           ├── http/           # route handlers
 │           └── index.ts        # the context's public interface
 └── webapp/
-    └── src/
-        ├── features/<capability>/   # one user journey: model/, application/, api/, ui/, index.ts
-        ├── domains/<context>/       # domain pieces several features share
-        ├── ui/                      # generic design-system kit
-        ├── testing/                 # render helper, MSW handlers
-        └── config.ts                # the parsed environment
+    ├── src/
+    │   ├── features/<capability>/   # one user journey: model/, application/, api/, ui/, index.ts
+    │   ├── domains/<context>/       # domain pieces several features share
+    │   ├── ui/                      # generic design-system kit
+    │   ├── testing/                 # render helper, MSW handlers
+    │   └── config.ts                # the parsed environment
+    ├── e2e/
+    │   ├── ui/                      # Playwright journeys with the API stubbed      -> test:ui
+    │   └── integrated/              # one Playwright journey against the real API  -> test:e2e
+    └── playwright.config.ts         # one config, two projects: ui and integrated
 packages/
 └── shared/
     └── src/<context>/          # the API contract: endpoints, schemas, fixtures

@@ -46,7 +46,11 @@ A `Car` in a rentals context (is it available, what does it cost) is not the sam
 ```
 apps/backend/src/
   rentals/          # bounded context
-    domain/         # aggregates, entities, value objects, domain services, events, repository interfaces
+    domain/         # pure TypeScript; one flat folder while small, grouped by concept once it grows:
+      car/            #   one folder per aggregate: root, state, lifecycle operations, events, its tests
+      value-objects/  #   RentalPeriod, Money, ...
+      pricing/        #   policies named as the domain names them, one file each, in a list or map
+      testing/        #   builders for hand-placed aggregates, used only by tests
     application/    # use cases orchestrating the domain
     infrastructure/ # repository implementations, external clients
     http/           # route handlers
@@ -88,6 +92,10 @@ Getting this backwards produces contexts that depend on each other in both direc
 **Tooling enforces the boundary.** `eslint-plugin-boundaries` in `eslint.config.mjs` makes any import of another context other than its `index.ts` a lint error. Lint cannot see an `index.ts` that exports an aggregate or entity; the `code-reviewer` checks that.
 
 **Direction of dependency is a decision.** When two contexts integrate, name which is upstream and which is downstream, and record it in the doc's Public interface section. A downstream context either conforms to the upstream language or wraps it in a translation layer; drifting between the two without deciding is how the boundary erodes.
+
+### Inside `domain/`
+
+Group by concept, not by tactical pattern: a reader should find the aggregate, the entities it owns, its value objects and its replaceable policies by folder name, and every folder name should be a word from the ubiquitous language (`car/`, `bookings/`, `pricing/`), with `value-objects/` and `testing/` as the only generic ones. Start flat; regroup when the folder stops reading at a glance, which is about ten files. The policies a modification is most likely to replace (pricing, eligibility, late-return penalties) live as one file each in an ordered list or a keyed map, so a change is a new file and one entry, never a new branch. Tests sit beside the code they cover inside those folders.
 
 ## Ubiquitous language
 

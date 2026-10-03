@@ -13,6 +13,7 @@ Each bounded context lives in `apps/backend/src/<context>/`:
 
 Rules:
 - Dependencies point inward: http → application → domain. Infrastructure implements interfaces defined in domain/application.
+- Inside `domain/`, keep one flat folder only while it reads at a glance (about ten files). Past that, group by concept, named in the ubiquitous language, never by technical pattern alone: one folder per aggregate (`car/`: the root, its serialisable state and read view, its lifecycle operations, its events, and the tests of the capabilities it owns); a folder for the entities it owns when they are many (`bookings/`); `value-objects/`; a folder for the policies a change is most likely to replace, named as the domain names them (`pricing/`, `eligibility/`), each policy its own file in an ordered list or keyed map rather than a branch in a code path; and `testing/` for hand-placement builders used only by tests. Tests sit beside the code they cover inside those folders; the `@/` alias makes a later move cheap, so regroup the moment the flat folder stops reading.
 - Invariants are enforced inside the aggregate. State changes only through aggregate methods named after domain operations; no public setters. Code outside the aggregate never holds references to objects inside it.
 - One aggregate per transaction. When an operation must also change a second aggregate, that change reacts to a domain event; eventual consistency between aggregates is intended.
 - Domain events are named in the past tense (`CarReturnedLate`) and raised by the aggregate root.
