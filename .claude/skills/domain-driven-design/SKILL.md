@@ -95,7 +95,7 @@ Getting this backwards produces contexts that depend on each other in both direc
 
 ### Inside `domain/`
 
-Group by concept, not by tactical pattern: a reader should find the aggregate, the entities it owns, its value objects and its replaceable policies by folder name, and every folder name should be a word from the ubiquitous language (`car/`, `bookings/`, `pricing/`), with `value-objects/` and `testing/` as the only generic ones. Start flat; regroup when the folder stops reading at a glance, which is about ten files. The policies a modification is most likely to replace (pricing, eligibility, late-return penalties) live as one file each in an ordered list or a keyed map, so a change is a new file and one entry, never a new branch. Tests sit beside the code they cover inside those folders.
+Group by concept, not by tactical pattern: a reader should find the aggregate, the entities it owns, its value objects and its replaceable policies by folder name, and every folder name should be a word from the ubiquitous language (`car/`, `bookings/`, `pricing/`), with `value-objects/` and `testing/` as the only generic ones. Start flat; regroup when the folder stops reading at a glance, which is about ten files. The policies a modification is most likely to replace (pricing, eligibility, late-return penalties) live as one file each in an ordered list or a keyed map, so a change is a new file and one entry, never a new branch. Tests sit beside the code they cover inside those folders. Each concept module also owns its value sets (`as const` arrays with the type derived from them) and the named subsets the domain speaks of, so a set is declared once, where its concept lives, and is never relisted by a lookup table or a test.
 
 ## Ubiquitous language
 

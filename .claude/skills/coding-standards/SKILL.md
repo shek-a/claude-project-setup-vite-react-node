@@ -185,7 +185,28 @@ const ROLES = ["admin", "customer", "agent"] as const;
 type Role = (typeof ROLES)[number]; // "admin" | "customer" | "agent"
 ```
 
-Once the type is a union, comparing against a literal is checked: `car.status === "availble"` is a compile error, so no separate constant is needed.
+Once the type is a union, comparing against a literal is checked: `car.status === "availble"` is a compile error, so no separate constant is needed for a single value.
+
+The set lives in the module of the concept it belongs to, as the `domain/` folder is grouped, and owns the subsets the domain names. A set that exists only as a type union has no runtime home, so the next lookup table or test spells it out again.
+
+**Violation:** the event kinds exist only in the union, and a test relists the ones billing cares about, untyped.
+
+```ts
+export type RentalEvent = { kind: "car_booked"; … } | { kind: "car_returned"; … } | { kind: "car_returned_late"; … };   // domain/events.ts
+const billable = ["car_returned", "car_returned_late"];                                                           // a test file
+```
+
+**Fix:** the set and its named subset beside the type, declared once and checked against each other; tests import them.
+
+```ts
+// apps/backend/src/rentals/domain/events.ts
+export const RENTAL_EVENT_KINDS = ["car_booked", "car_returned", "car_returned_late"] as const;
+export type RentalEventKind = (typeof RENTAL_EVENT_KINDS)[number];
+/** The events billing reacts to: a named subset, declared once beside its set. */
+export const BILLABLE_EVENT_KINDS = ["car_returned", "car_returned_late"] as const satisfies readonly RentalEventKind[];
+```
+
+A shared test value, such as a hold decision every test sends, comes from the test builders in `domain/testing/`, not from a `const` at the top of each test file.
 
 ### No enums
 
