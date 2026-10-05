@@ -196,14 +196,14 @@ export type RentalEvent = { kind: "car_booked"; … } | { kind: "car_returned"; 
 const billable = ["car_returned", "car_returned_late"];                                                           // a test file
 ```
 
-**Fix:** the set and its named subset beside the type, declared once and checked against each other; tests import them.
+**Fix:** the set and its named subset beside the type, declared once; the subset is annotated with the set's type rather than declared `as const`, so a misspelled member fails to compile and `includes` accepts any member of the set. Tests import them.
 
 ```ts
 // apps/backend/src/rentals/domain/events.ts
 export const RENTAL_EVENT_KINDS = ["car_booked", "car_returned", "car_returned_late"] as const;
 export type RentalEventKind = (typeof RENTAL_EVENT_KINDS)[number];
 /** The events billing reacts to: a named subset, declared once beside its set. */
-export const BILLABLE_EVENT_KINDS = ["car_returned", "car_returned_late"] as const satisfies readonly RentalEventKind[];
+export const BILLABLE_EVENT_KINDS: readonly RentalEventKind[] = ["car_returned", "car_returned_late"];
 ```
 
 A shared test value, such as a hold decision every test sends, comes from the test builders in `domain/testing/`, not from a `const` at the top of each test file.
