@@ -17,7 +17,7 @@ Written from [`.claude/skills/domain-driven-design/template.md`](../../.claude/s
 
 ## How these documents are used
 
-- **Writing them:** run `/domain-driven-design` before building a feature or introducing a domain concept. It interviews you about the business, writes or updates the document, and stops for your review before any code is written.
+- **Writing them:** run `/domain-driven-design` before building a feature or introducing a domain concept. It grills you about the business in rounds of numbered questions (the `grilling` skill) until you agree on the language and rules, then writes or updates the document, and stops for your review before any code is written.
 - **Building from them:** the `test-driven-development` skill works through the test list one behavior at a time.
 - **Reviewing against them:** the `code-reviewer` agent checks that the code does what the document says and uses its terms.
 
