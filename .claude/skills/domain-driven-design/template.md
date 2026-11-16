@@ -21,8 +21,8 @@ Subdomain: core | supporting | generic
 |---|---|
 
 ## Use cases
-| Use case | Actor | Endpoint (contract) | Input schema | Result / errors |
-|---|---|---|---|---|
+| Use case | Actor | Endpoint (method and path) | Input schema | Result | Errors (HTTP status) |
+|---|---|---|---|---|---|
 
 ## Public interface
 Other contexts use this context only through `apps/backend/src/<context>/index.ts`, which exports use cases and DTOs, never aggregates or entities.

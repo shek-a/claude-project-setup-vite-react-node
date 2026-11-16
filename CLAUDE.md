@@ -17,8 +17,7 @@ Setup, stack, and how to run everything: `README.md`.
 # Workflow
 - IMPORTANT: Test-driven. No production code without a failing test first. Follow the `test-driven-development` skill.
 - Never weaken or delete an existing test to get green. If a requirement changed, say so explicitly first.
-- New feature or new domain concept: run `/domain-driven-design` before any code.
-- New frontend capability: run `/frontend-domain-modeling` before any code (after `/domain-driven-design` if the backend changes too).
+- New feature, domain concept, or frontend capability: before any code, ask the user to run `/grill-me <the requirement>`, then `/implement <brief>`; only the user can start these two. `/grill-me` gathers the requirements, with no design, into a brief in `docs/requirements/`. Then `/implement <brief>` designs it (context map, domain document, contract, test list, through the `domain-driven-design` and `frontend-domain-modeling` skills), stops once for your review, then builds and commits it.
 - Check library and framework APIs against current docs with the Context7 MCP tools (`resolve-library-id`, then `query-docs`) instead of relying on memory; versions change APIs and defaults.
 
 # Definition of done
@@ -29,7 +28,7 @@ Setup, stack, and how to run everything: `README.md`.
   - the contract, or anything spanning both apps: `yarn workspace webapp test:e2e`, the full-stack journey. A full-stack change is not done until it passes.
 - Say which suites you ran and which you didn't. Never describe a suite you skipped as passing.
 - The `code-reviewer` has run, and every finding is fixed or declined with a reason.
-- `docs/domain/<context>.md` and the contract match the code, and nothing is left TODO, skipped, or `.only`.
+- `docs/domain/<context>.md`, `docs/domain/context-map.md`, and the contract match the code, and nothing is left TODO, skipped, or `.only`.
 
 # Architecture
 - The backend owns the business rules and is the source of truth; HTTP is one delivery layer. The frontend never re-implements a domain invariant.

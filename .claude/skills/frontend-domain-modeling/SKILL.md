@@ -19,13 +19,13 @@ Before implementing a new frontend capability:
 
 1. Describe the user capability in business language.
 2. Identify the backend contexts involved, and read their `docs/domain/<context>.md`.
-3. Identify the representations published by those contexts: their Zod schemas in `packages/shared`.
+3. Identify the representations published by those contexts: their Zod schemas in `packages/shared`, or, for endpoints not built yet, the contract recorded in the domain document's Use cases table.
 4. Define the frontend model needed by the user journey.
 5. Define mappings from transport DTOs into that model.
 6. Identify server state, local UI state, and derived state.
 7. Express meaningful user actions explicitly.
 8. Identify validation that improves usability without treating it as authoritative enforcement.
-9. Derive the test list: behaviors as test names, from the user's point of view. This is the backlog for the `test-driven-development` skill.
+9. Derive the test list: behaviors as test names, from the user's point of view. Write it under `Frontend` in the test list of `docs/domain/<context>.md`, for the context whose use cases the capability mainly drives. This is the backlog for the `test-driven-development` skill.
 10. Present the model and the test list for review, and stop before implementation.
 
 If the capability needs a backend concept or rule that doesn't exist yet, run the `domain-driven-design` skill first. This skill consumes what the backend publishes; it doesn't invent it.
