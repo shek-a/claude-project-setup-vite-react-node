@@ -123,7 +123,7 @@ The repo is set up so Claude follows the same conventions you do:
 
 - **`CLAUDE.md`** — the standing instructions: commands, workflow, architecture.
 - **`.claude/rules/`** — always-on rules, loaded for the files they apply to (TypeScript, React, Tailwind, backend architecture, the API contract).
-- **`.claude/skills/`** — the workflows: `domain-driven-design` before new features, `frontend-domain-modeling` for new UI capabilities, `test-driven-development` for all production code, and `coding-standards` for worked examples. `grilling` (and `/grill-me` to start it yourself) is the interview `domain-driven-design` uses to reach a shared understanding before anything is written; both are vendored from [mattpocock/skills](https://github.com/mattpocock/skills) under its MIT licence.
+- **`.claude/skills/`** — the workflows: `domain-driven-design` before new features, `frontend-domain-modeling` for new UI capabilities, `test-driven-development` for all production code, `/implement` to build a domain document's test list through to a reviewed commit, and `coding-standards` for worked examples. `grilling` (and `/grill-me` to start it yourself) is the interview `domain-driven-design` uses to reach a shared understanding before anything is written; both are vendored from [mattpocock/skills](https://github.com/mattpocock/skills) under its MIT licence.
 - **`.claude/hooks/`** — the gates: ESLint runs after every edit, and a turn can't end with failing typechecks or tests.
 - **`.claude/agents/code-reviewer.md`** — reviews a diff against the domain documents and the rules.
 
