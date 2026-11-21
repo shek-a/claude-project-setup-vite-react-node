@@ -26,6 +26,7 @@ Setup, stack, and how to run everything: `README.md`.
   - backend `infrastructure/` (repositories, adapters): `yarn workspace backend test:integration`
   - a frontend journey or the app shell: `yarn workspace webapp test:ui`
   - the contract, or anything spanning both apps: `yarn workspace webapp test:e2e`, the full-stack journey. A full-stack change is not done until it passes.
+  - anything else (a domain rule, a use case, a component or `model/` function inside an existing journey): the app's unit tests (`yarn workspace <app> test`) are enough, provided the contract and the journey are unchanged.
 - Say which suites you ran and which you didn't. Never describe a suite you skipped as passing.
 - The `code-reviewer` has run, and every finding is fixed or declined with a reason.
 - `docs/domain/<context>.md`, `docs/domain/context-map.md`, and the contract match the code, and nothing is left TODO, skipped, or `.only`.
