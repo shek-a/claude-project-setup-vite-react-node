@@ -37,7 +37,10 @@ Write no production code in this step. The contract is designed and recorded in 
 This is the one place the user reviews before code is written. Show:
 - the context map from `docs/domain/context-map.md`, as a Mermaid block;
 - each domain document written or updated, by path, with a one-line summary of what changed;
-- the contract: endpoint signatures with their errors and HTTP statuses;
+- the published interfaces, both of which are contracts:
+  - the HTTP contract: endpoint signatures with their errors and HTTP statuses;
+  - each context interface (`index.ts`): the use cases other contexts call, and each domain event published, with its payload and the contexts that consume it;
+- the rule placement table from each domain document: every rule and edge case from the brief, the context that owns it, and its owner: an invariant of a named aggregate, a value object's validation, a rule spanning several aggregates, or a reaction to a named event, with any frontend check marked as usability only;
 - when the frontend was modelled, the frontend model: the capability, the DTO mappings, the split between server, UI, and derived state, and the user actions with their outcomes;
 - the test list to build, in order, as test names under Domain, Application, and Frontend;
 - the suites the Definition of done in `CLAUDE.md` requires for the parts of the code these items change. Read it there; do not work from memory.

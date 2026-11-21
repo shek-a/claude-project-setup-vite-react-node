@@ -13,7 +13,8 @@ Written from [`.claude/skills/domain-driven-design/template.md`](../../.claude/s
 - **Aggregates** — identity, invariants that must always hold, the operations they accept, and the events they raise.
 - **Value objects** and their validation rules.
 - **Use cases** — actor, endpoint, input schema, result and errors.
-- **Public interface** — what this context exposes to others, what it publishes, and the direction of each integration.
+- **Public interface** — what this context exposes to others, the events it publishes (with payload and consumers), and the direction of each integration.
+- **Rule placement** — each rule and edge case, and what owns it: an aggregate's invariant, a value object, a rule spanning aggregates, or a reaction to an event.
 - **Test list** — the behaviors to build, as test names.
 - **Out of scope.**
 
