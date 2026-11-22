@@ -1,4 +1,4 @@
-<!-- Template: replace every <placeholder> with this project's details, then delete this comment. -->
+<!-- Template: follow TEMPLATE.md to set the project up, replace every <placeholder> below with this project's details, then delete TEMPLATE.md and this comment. -->
 
 # \<Product name\>
 
@@ -123,8 +123,43 @@ The repo is set up so Claude follows the same conventions you do:
 
 - **`CLAUDE.md`** — the standing instructions: commands, workflow, architecture.
 - **`.claude/rules/`** — always-on rules, loaded for the files they apply to (TypeScript, React, Tailwind, backend architecture, the API contract).
-- **`.claude/skills/`** — the workflows: `domain-driven-design` before new features, `frontend-domain-modeling` for new UI capabilities, `test-driven-development` for all production code, and `coding-standards` for worked examples.
+- **`.claude/skills/`** — the workflows. A feature takes two commands: `/grill-me <the requirement>` interviews you until you share an understanding and writes the requirements, with no design, as a brief in `docs/requirements/`; `/implement <brief>` designs it (context map, domain document, contract, test list), stops once for your review, then builds it through to a reviewed commit. Underneath, `domain-driven-design` and `frontend-domain-modeling` do the modelling, `test-driven-development` governs all production code, and `coding-standards` has worked examples. `grilling` is vendored from [mattpocock/skills](https://github.com/mattpocock/skills), and `grill-me` adapted from it, under its MIT licence.
 - **`.claude/hooks/`** — the gates: ESLint runs after every edit, and a turn can't end with failing typechecks or tests.
 - **`.claude/agents/code-reviewer.md`** — reviews a diff against the domain documents and the rules.
+
+### Building a feature: `/grill-me`, then `/implement`
+
+A feature takes two commands, with one review in between. Example: customers should be able to extend a rental.
+
+**1. `/grill-me customers can extend a rental`**
+
+Claude reads the existing domain documents, then interviews you in rounds of numbered questions, each with a recommended answer, about the business only:
+
+```
+❓ Q1 - Overlap: can an extension overlap another booking of the same car?
+➡️ No: the extension is rejected and the customer is told the car is booked.
+
+❓ Q2 - Limit: is there a maximum extension?
+➡️ Yes, 14 days in total, as the current terms say.
+```
+
+You answer ("yes", or a correction), and it asks the next round until nothing is left open and you confirm you share an understanding. It then writes the requirements, with no design, to `docs/requirements/extend-rental.md` (problem, actors, agreed terms, rules, examples with real numbers, edge cases, the user journey, what is out of scope) and ends with the next command to run.
+
+**2. `/implement docs/requirements/extend-rental.md`**
+
+Claude designs the change from the brief and stops once for your review, showing:
+- the context map diagram (bounded contexts, what reaches them, events between them);
+- what changed in each domain document, and where each rule is enforced;
+- the published interfaces: the HTTP contract (endpoints, errors, statuses) and each context's interface, including the events it publishes;
+- the test list, as test names, and the suites the change needs.
+
+For this example: an `extendRental` use case in the `rentals` context with the overlap and 14-day rules as invariants of the rental, a `POST /api/rentals/:id/extension` endpoint in the shared contract, and an extend form in the webapp's `manage-rentals` feature.
+
+Ask for changes or approve. After approval it builds each test-list item test first (red, green, refactor), runs typecheck, the unit tests, and `yarn workspace webapp test:e2e` (the contract changed), runs the `code-reviewer` and fixes or declines each finding, then makes one commit and reports what ran and what did not. It never pushes or opens a pull request; that is yours to do.
+
+**Variations**
+- **Something already designed:** `/implement docs/domain/rentals.md "rejects an extension that overlaps another booking"` builds named test-list items without a brief.
+- **A trivial change** (a typo, a config value): just ask. The test-first rule and the hooks still apply.
+- **A requirements gap found during design or build:** Claude stops and asks rather than inventing a rule, and records the answer in the brief.
 
 Reading `CLAUDE.md` and the rules is also the fastest way for a person to learn the conventions of this codebase.

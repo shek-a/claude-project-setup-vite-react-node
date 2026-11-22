@@ -37,7 +37,7 @@ Do not create app-wide context just to avoid passing props; app-wide context is 
 - Name user actions after the user's intent (`reserveCar`), and model their outcome as a discriminated union, including the API's named rejections.
 - The backend owns business rules. Never re-implement them (availability, eligibility, pricing); show what the API publishes. Client-side validation is for usability only; always handle the API rejecting a request.
 - Everything in the web app's environment is bundled into the JavaScript the browser downloads, and Vite only exposes `VITE_`-prefixed variables: put no secrets there. A value that must stay secret belongs to the API, which exposes only what the contract publishes.
-- Before building a new capability, run the `frontend-domain-modeling` skill; it has examples of each rule above.
+- Before building a new capability, ask the user to run `/grill-me`, then `/implement`, which models it with the `frontend-domain-modeling` skill; that skill has examples of each rule above.
 
 ## Examples
 - Worked examples of these rules: `.claude/skills/coding-standards/react.md`. Layering and domain modeling: the `frontend-domain-modeling` skill.
