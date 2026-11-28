@@ -29,8 +29,9 @@ yarn install                                   # root only, never inside an app
 cp apps/backend/.env.example apps/backend/.env # fill in any values marked as required
 cp apps/webapp/.env.example apps/webapp/.env
 
-docker compose -f docker-compose.integration.yml up -d --wait   # Postgres (same file the test suites use)
-yarn workspace backend migrate
+docker compose -f docker-compose.integration.yml up -d --wait   # Postgres, with app_dev and app_test
+yarn workspace backend migrate                                  # app_dev, from apps/backend/.env
+yarn workspace backend seed:dev                                 # sample data to click through; rerun to reset
 ```
 
 Then start both apps, in two terminals:
@@ -41,6 +42,8 @@ yarn workspace webapp dev     # <http://localhost:5173>
 ```
 
 Each app reads its configuration from environment variables, parsed once at startup. A missing variable fails immediately and names itself, so a boot error usually means a value is missing from your `.env`.
+
+Your local data lives in `app_dev` and the tests use `app_test`, in the same container, so running the suites never touches what you set up by hand. `yarn workspace backend seed:dev` replaces `app_dev`'s contents with the sample set.
 
 ## Running the apps
 
