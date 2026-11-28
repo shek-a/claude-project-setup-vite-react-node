@@ -42,8 +42,12 @@ One journey that proves the contract holds at runtime:
 browser -> real frontend build -> HTTP -> real API -> domain + repositories -> Postgres (Docker Compose)
 ```
 
-- Playwright's global setup starts the Compose file from [integration.md](integration.md), runs `yarn workspace backend migrate`, then `yarn workspace backend seed:e2e`, which truncates and inserts what the journey needs (a bookable car, a customer). Seeding is a script, so no test-only route reaches production code.
-- `webServer` boots the API and the frontend; `use.baseURL` points at the frontend.
+- The database must be up, migrated, and seeded before the API starts, and Playwright starts `webServer` before `globalSetup`. So the `test:e2e` script prepares it, not a Playwright hook:
+  ```json
+  "test:e2e": "docker compose -f ../../docker-compose.integration.yml up -d --wait && dotenv -e ../backend/.env.test -- sh -c 'yarn workspace backend migrate && yarn workspace backend seed:e2e && playwright test'"
+  ```
+  `seed:e2e` truncates `app_test` and inserts what the journey needs (a bookable car, a customer); it refuses to run against a database whose name does not end in `_test`. Seeding is a script, so no test-only route reaches production code. `dotenv` is `dotenv-cli`; it gives the migration, the seed, and the API the same test environment, and variables already set win over `apps/backend/.env`, so the run cannot reach `app_dev`.
+- `webServer` boots the API (inheriting that environment) and the frontend; `use.baseURL` points at the frontend.
 - Keep it to the happy path plus at most one failure. Anything more belongs in the `ui` layer, which drives failures without touching data.
 - When this fails but the component tests pass, the contract drifted: the path, the payload, or an error shape no longer matches what the API sends.
 - Any change spanning both apps, including every contract change, is unfinished until this journey passes. Green unit tests on each side prove nothing about the two of them together.

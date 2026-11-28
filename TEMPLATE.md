@@ -27,13 +27,15 @@ This repository holds the conventions for a React + Vite and Node monorepo, not 
 6. Add the scripts the hooks and the workflow call. The Stop hook runs `typecheck` and `test` in every workspace that defines them:
    | Workspace | Scripts |
    |---|---|
-   | `apps/backend` | `dev`, `build`, `typecheck`, `test`, `test:integration`, `migrate`, `seed:e2e` |
+   | `apps/backend` | `dev`, `build`, `typecheck`, `test`, `test:integration`, `migrate`, `seed:dev`, `seed:e2e` |
    | `apps/webapp` | `dev`, `build`, `typecheck`, `test`, `test:ui`, `test:e2e` |
    | `packages/shared` | `typecheck`, `test` |
+
+   `seed:dev` resets `app_dev` to a small realistic sample (a few records in each state the app shows), going through the use cases where practical so the sample obeys the same rules as real data. `seed:e2e` resets `app_test` to what the journey needs. Each refuses to run unless the database name ends in `_dev` or `_test` respectively.
 7. Add the files the rules refer to:
-   - `apps/<app>/src/config.ts`: the Zod-parsed environment, with an `.env.example` beside each app.
+   - `apps/<app>/src/config.ts`: the Zod-parsed environment, with an `.env.example` beside each app. The backend's `DATABASE_URL` names `app_dev` there, and a committed `apps/backend/.env.test` names `app_test` (Compose ports and dummy keys, no real secrets).
    - `apps/webapp/src/index.css`: the Tailwind entry file (`@import "tailwindcss"` and `@theme`); the ESLint config points at it.
-   - The test configuration described in `.claude/skills/test-driven-development/`: `integration.md` (Docker Compose and the Vitest integration config), `frontend.md` (the render helper and MSW), and `playwright.md` (the `ui` and `integrated` projects).
+   - The test configuration described in `.claude/skills/test-driven-development/`: `integration.md` (Docker Compose, the two databases with `docker/postgres/create-test-database.sql`, and the Vitest integration config), `frontend.md` (the render helper and MSW), and `playwright.md` (the `ui` and `integrated` projects).
 
 Until a workspace's `package.json` defines `typecheck` and `test`, the Stop hook skips them for that workspace; the lint hook needs ESLint installed.
 

@@ -22,10 +22,11 @@ test-results/
 blob-report/
 .playwright/
 
-# Environment: .env.example is committed and documents every variable
+# Environment: .env.example is committed and documents every variable; .env.test holds test-only values, no real secrets
 .env
 .env.*
 !.env.example
+!.env.test
 *.local
 
 # Logs

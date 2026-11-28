@@ -5,7 +5,8 @@ Setup, stack, and how to run everything: `README.md`.
 
 # Commands
 - Install: `yarn install` (root only, never inside an app)
-- Start locally: `yarn workspace backend dev` and `yarn workspace webapp dev`
+- Start locally: `yarn workspace backend dev` and `yarn workspace webapp dev` (Postgres from `docker-compose.integration.yml`; `yarn workspace backend migrate`, then `seed:dev` for sample data)
+- Databases: local development uses `app_dev`, the tests use `app_test`. Never point a test, a seed, or a migration run by a test at `app_dev`.
 - Tests for one app: `yarn workspace webapp test` / `yarn workspace backend test`
 - Single test file: `yarn workspace <app> vitest run <path>`
 - Integration tests (need Docker): `yarn workspace backend test:integration`
